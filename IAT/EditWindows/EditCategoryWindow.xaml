@@ -1,0 +1,17 @@
+﻿<Window x:Class="IAT.EditWindows.EditCategoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IAT.EditWindows"
+        mc:Ignorable="d"
+        Title="Izmjena Kategorije" Height="153.007" Width="300">
+    <Grid>
+        <Label Content="Naziv: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="30"/>
+        <Label Content="Redni Broj: " HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Height="30"/>
+        <Button x:Name="editButton" Content="Izmijeni" Margin="112,0,112,10" HorizontalAlignment="Center" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Padding="16,3" HorizontalContentAlignment="Center" Click="editButton_Click"/>
+        <TextBox x:Name="nameTextBox" HorizontalAlignment="Left" Height="23" Margin="80,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="positionTextBox" HorizontalAlignment="Left" Height="23" Margin="80,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+    </Grid>
+</Window>

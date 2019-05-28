@@ -1,0 +1,21 @@
+﻿<Window x:Class="IAT.AddWindows.AddTermListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IAT.AddWindows"
+        mc:Ignorable="d"
+        Title="AddTermListWindow" Height="328.731" Width="300">
+    <Grid>
+        <Label Content="List Delimiters: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="delimiterTextBox1" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="20" MaxLength="1" Text=","/>
+        <TextBox x:Name="delimiterTextBox2" HorizontalAlignment="Left" Height="23" Margin="35,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="20" MaxLength="1" Text=";"/>
+        <TextBox x:Name="delimiterTextBox3" HorizontalAlignment="Left" Height="23" Margin="60,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="20" MaxLength="1"/>
+        <TextBox x:Name="delimiterTextBox4" HorizontalAlignment="Left" Height="23" Margin="85,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="20" MaxLength="1"/>
+        <TextBox x:Name="delimiterTextBox5" HorizontalAlignment="Left" Height="23" Margin="110,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="20" MaxLength="1"/>
+        <Label Content="List: " HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="listTextBox" Height="167" Margin="10,95,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Button x:Name="addButton" Content="Add" HorizontalAlignment="Center" Margin="108,0,108,10" VerticalContentAlignment="Center" Click="addButton_Click" VerticalAlignment="Bottom" Padding="10,1"/>
+
+    </Grid>
+</Window>

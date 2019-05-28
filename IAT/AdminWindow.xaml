@@ -1,0 +1,331 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:IAT"
+        x:Class="IAT.AdminWindow"
+        mc:Ignorable="d"
+        Title="Administracija" Height="1407" Width="1366" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" Background="#FF1B3440" WindowState="Maximized">
+    <ScrollViewer Margin="0,10"  HorizontalContentAlignment="Stretch" Padding="0">
+        <Grid Name="ListGrid" Background="#FF4A849F" Height="1000"  Canvas.Left="11" Canvas.Top="10" Margin="10,0" VerticalAlignment="Top" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Active Test: " HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFF5F1D5" Margin="10,10,0,0" Height="26" Width="73"/>
+            <ComboBox x:Name="activeTestComboBox" ItemsSource="{Binding availableTests}" SelectedItem="{Binding ActiveTest, Source={x:Static local:Settings.Instance}}" IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="195" Height="26" Margin="92,10,0,0" VerticalContentAlignment="Center" Background="White"/>
+            <Label Content="Practice Test: " HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFF5F1D5" Margin="10,41,0,0" Height="26" Width="82"/>
+            <ComboBox x:Name="practiceTestComboBox" ItemsSource="{Binding availableTests}" DisplayMemberPath="name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="195" Height="26" Margin="92,41,0,0" VerticalContentAlignment="Center" Background="White"/>
+            <Label Content="Admin Password: " HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFF5F1D5" Margin="10,72,0,0" Height="26" Width="104"/>
+            <TextBox Text="{Binding AdminPassword, Source={x:Static local:Settings.Instance}}" TextWrapping="Wrap" Margin="114,72,0,0" HorizontalAlignment="Left" Width="173" Height="26" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+            <Grid Background="#FFB4D6C6" Grid.ColumnSpan="4" Margin="10,40,10,10" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+                </Grid.RowDefinitions>
+                <DataGrid ItemsSource="{Binding Test}" x:Name="testList" Margin="10,10,10,0" Grid.RowSpan="2" Grid.ColumnSpan="3" KeyUp="testList_KeyUp" Background="White" UseLayoutRounding="False" ClipToBounds="True" CellEditEnding="testList_CellEditEnding">
+                    <DataGrid.Columns>
+                        <!--<GridViewColumn Header="Name" Width="80" DisplayMemberBinding="{Binding name}"/>
+                        <GridViewColumn Header="Min Question Time" Width="120" DisplayMemberBinding="{Binding minQuestionTime}"/>
+                        <GridViewColumn Header="Allowed % &gt; Min Question Time" Width="120" DisplayMemberBinding="{Binding allowedPercentageBelowMinQuestionTime}"/>
+
+                        <GridViewColumn Header="Max Question Time" Width="120" DisplayMemberBinding="{Binding maxQuestionTime}"/>
+                        <GridViewColumn Header="Allowed % &lt; Max Question Time" Width="120" DisplayMemberBinding="{Binding allowedPercentageAboveMaxQuestionTime}"/>
+
+                        <GridViewColumn Header="Min Total Time" Width="120" DisplayMemberBinding="{Binding minTotalTime}"/>
+                        <GridViewColumn Header="Max Total Time" Width="120" DisplayMemberBinding="{Binding maxTotalTime}"/>
+
+                        <GridViewColumn Header="Max Question Time Before Ignoring" Width="120" DisplayMemberBinding="{Binding maxQuestionTimeBeforeIgnore}"/>
+
+                        <GridViewColumn Header="Description" Width="200" DisplayMemberBinding="{Binding description}"/>-->
+                    </DataGrid.Columns>
+                    <DataGrid.ItemContainerStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <EventSetter Event="Control.MouseDoubleClick" Handler="testList_MouseDoubleClick" />
+                            <Setter Property="MaxHeight" Value="50" />
+                        </Style>
+                    </DataGrid.ItemContainerStyle>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu x:Name="testListContextMenu" StaysOpen="true" Background="WhiteSmoke">
+                            <ContextMenu.BitmapEffect>
+                                <BitmapEffectGroup/>
+                            </ContextMenu.BitmapEffect>
+                            <MenuItem Header="Delete" x:Name="removeTestContextMenuItem" Click="removeTestContextMenuItem_Click"/>
+                            <MenuItem Header="Edit" x:Name="editTestContextMenuItem" Click="editTestContextMenuItem_Click"/>
+                            <MenuItem Header="Duplicate" x:Name="duplicateTestContextMenuItem" Click="duplicateTestContextMenuItem_Click"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+                <Button x:Name="addTestButton" Content="Add" HorizontalAlignment="Left" Margin="114,0,0,10" VerticalAlignment="Bottom" Grid.Row="2" Click="addTestButton_Click" Padding="8,1"/>
+                <Button x:Name="deleteTestButton" Content="Delete" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="2" VerticalAlignment="Bottom" Click="deleteTestButton_Click" Padding="8,1"/>
+                <Button x:Name="editTestButton" Content="Edit" HorizontalAlignment="Left" Margin="69,0,0,10" VerticalAlignment="Bottom" Grid.Row="2" Click="editTestButton_Click" Padding="8,1"/>
+                <Button x:Name="duplicateTestButton" Content="Duplicate" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Grid.Row="2" Grid.Column="2" Click="duplicateTestButton_Click" Padding="8,1"/>
+                <Button x:Name="calculateStatsButton" Content="Calculate Stats" Grid.Column="1" Margin="165,0,165,8" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="8,1" Click="calculateStatsButton_Click"/>
+            </Grid>
+            <Label x:Name="testsLabel" Content="Tests" VerticalAlignment="Top" Height="40" Background="{x:Null}" Foreground="White" FontSize="24" Padding="5,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="4" Grid.Row="1"/>
+            <Grid Background="#FFB4D6C6" Grid.ColumnSpan="2" Margin="10,40,10,10" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="124*"/>
+                    <ColumnDefinition Width="129*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+                </Grid.RowDefinitions>
+                <DataGrid ItemsSource="{Binding ElementName=testList, Path=SelectedItem.blocks}" IsSynchronizedWithCurrentItem="True" x:Name="blockList" Margin="10,10,10,0" Grid.ColumnSpan="2" Grid.RowSpan="2" KeyUp="blockList_KeyUp" CellEditEnding="blockList_CellEditEnding">
+                    <DataGrid.CommandBindings>
+                        <CommandBinding Command="Copy" Executed="BlocksCopyCommand" />
+                        <CommandBinding Command="Paste" Executed="BlocksPasteCommand" />
+                        <!--<CommandBinding Command="Duplicate" Executed="BlocksDuplicateCommand" />-->
+                    </DataGrid.CommandBindings>
+                    <DataGrid.InputBindings>
+                        <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                        <KeyBinding Key="V" Modifiers="Control" Command="Paste" />
+                        <!--<KeyBinding Key="D" Modifiers="Control" Command="Duplicate" />-->
+                    </DataGrid.InputBindings>
+                    <DataGrid.Columns>
+                        <!--<GridViewColumn Header="Name" Width="100" DisplayMemberBinding="{Binding name}"/>
+                        <GridViewColumn Header="Trials" Width="50" DisplayMemberBinding="{Binding trialCount}"/>
+                        <GridViewColumn Header="ID" Width="32" DisplayMemberBinding="{Binding id}"/>
+                        <GridViewColumn Header="Congruence" Width="110" DisplayMemberBinding="{Binding congruence}"/>
+                        <GridViewColumn Header="SD Group" Width="100" DisplayMemberBinding="{Binding sdGroup}"/>
+                        <GridViewColumn Header="Shuffle Group" Width="32" DisplayMemberBinding="{Binding shuffleGroup}"/>
+                        <GridViewColumn Header="Description" Width="100" DisplayMemberBinding="{Binding description}"/>-->
+                    </DataGrid.Columns>
+                    <DataGrid.ItemContainerStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <EventSetter Event="Control.MouseDoubleClick" Handler="blockList_MouseDoubleClick" />
+                            <Setter Property="MaxHeight" Value="50" />
+                        </Style>
+                    </DataGrid.ItemContainerStyle>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu x:Name="blockListContextMenu" StaysOpen="true" Background="WhiteSmoke">
+                            <ContextMenu.BitmapEffect>
+                                <BitmapEffectGroup/>
+                            </ContextMenu.BitmapEffect>
+                            <MenuItem Header="Delete" x:Name="removeBlockContextMenuItem" Click="removeBlockContextMenuItem_Click"/>
+                            <MenuItem Header="Edit" x:Name="editBlockContextMenuItem" Click="editBlockContextMenuItem_Click" />
+                            <MenuItem Header="Duplicate" x:Name="duplicateBlockContextMenuItem" Click="duplicateBlockContextMenuItem_Click"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+                <Button x:Name="addBlockButton" Content="Add" HorizontalAlignment="Left" Margin="114,0,0,10" VerticalAlignment="Bottom" Click="addBlockButton_Click" Grid.Row="2" Padding="8,1"/>
+                <Button x:Name="deleteBlockButton" Content="Delete" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="2" VerticalAlignment="Bottom" Click="deleteBlockButton_Click" Padding="8,1"/>
+                <Button x:Name="editBlockButton" Content="Edit" HorizontalAlignment="Left" Margin="69,0,0,10" VerticalAlignment="Bottom" Grid.Row="2" Click="editBlockButton_Click" Padding="8,1"/>
+                <Button x:Name="duplicateBlockButton" Content="Duplicate" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Grid.Row="2" Grid.Column="1" Click="duplicateBlockButton_Click" Padding="8,1"/>
+                <Button x:Name="pasteBlockButton" Content="Paste" HorizontalAlignment="Right" Margin="0,0,85,10" VerticalAlignment="Bottom" Grid.Row="2" Grid.Column="1" Click="pasteBlockButton_Click" Padding="8,1"/>
+                <Button x:Name="copyBlockButton" Content="Copy" HorizontalAlignment="Right" Margin="0,0,138,10" VerticalAlignment="Bottom" Grid.Row="2" Click="copyBlockButton_Click" Padding="8,1" Grid.Column="1"/>
+                <Button x:Name="addDescriptionBlock" Content="Add Description Block" HorizontalAlignment="Left" Margin="161,0,0,10" VerticalAlignment="Bottom" Click="addDescriptionBlock_Click" Grid.Row="2" Padding="8,1"/>
+                <Button x:Name="manageSDGroupsButton" Content="SD Groups" HorizontalAlignment="Left" Margin="303,0,0,10" Grid.Row="2" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Padding="8,1"/>
+            </Grid>
+            <Label x:Name="blocksLabel" Content="Blocks" VerticalAlignment="Top" Height="40" Background="{x:Null}" Foreground="White" FontSize="24" Padding="5,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,10,0"/>
+            <Grid Background="#FFB4D6C6" Grid.ColumnSpan="2" Grid.Column="2" Margin="10,40,10,10" Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto" MaxHeight="40"/>
+                </Grid.RowDefinitions>
+                <DataGrid ItemsSource="{Binding ElementName=blockList, Path=SelectedItem.categories}" IsSynchronizedWithCurrentItem="True" x:Name="categoryList" Margin="10" Grid.RowSpan="2" KeyUp="categoryList_KeyUp" CellEditEnding="categoryList_CellEditEnding">
+                    <DataGrid.CommandBindings>
+                        <CommandBinding Command="Copy" Executed="CategoriesCopyCommand" />
+                        <CommandBinding Command="Paste" Executed="CategoriesPasteCommand" />
+                        <!--<CommandBinding Command="Duplicate" Executed="CategoriesDuplicateCommand" />-->
+                    </DataGrid.CommandBindings>
+                    <DataGrid.InputBindings>
+                        <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                        <KeyBinding Key="V" Modifiers="Control" Command="Paste" />
+                        <!--<KeyBinding Key="D" Modifiers="Control" Command="Duplicate" />-->
+                    </DataGrid.InputBindings>
+                    <DataGrid.Columns>
+                        <!--<GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding name}"/>-->
+                    </DataGrid.Columns>
+                    <DataGrid.ItemContainerStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <EventSetter Event="Control.MouseDoubleClick" Handler="categoryList_MouseDoubleClick" />
+                            <Setter Property="MaxHeight" Value="50" />
+                        </Style>
+                    </DataGrid.ItemContainerStyle>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu x:Name="categoryListContextMenu" StaysOpen="true" Background="WhiteSmoke">
+                            <ContextMenu.BitmapEffect>
+                                <BitmapEffectGroup/>
+                            </ContextMenu.BitmapEffect>
+                            <MenuItem Header="Delete" x:Name="removeCategoryContextMenuItem" Click="removeCategoryContextMenuItem_Click"/>
+                            <MenuItem Header="Edit" x:Name="editCategoryContextMenuItem" Click="editCategoryContextMenuItem_Click" />
+                            <MenuItem Header="Duplicate" x:Name="duplicateCategoryContextMenuItem" Click="duplicateCategoryContextMenuItem_Click"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+                <Button x:Name="addCategoryButton" Content="Add" HorizontalAlignment="Left" Margin="114,0,0,10" VerticalAlignment="Bottom" Click="addCategoryButton_Click" Grid.Row="2" Padding="8,1"/>
+                <Button x:Name="deleteCategoryButton" Content="Delete" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="2" VerticalAlignment="Bottom" Click="deleteCategoryButton_Click" Padding="8,1"/>
+                <Button x:Name="editCategoryButton" Content="Edit" HorizontalAlignment="Left" Margin="69,0,0,10" VerticalAlignment="Bottom" Click="editCategoryButton_Click" Grid.Row="2" Padding="8,1"/>
+                <Button x:Name="duplicateCategoryButton" Content="Duplicate" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Grid.Row="2" Click="duplicateCategoryButton_Click" Padding="8,1"/>
+                <Button x:Name="pasteCategoryButton" Content="Paste" HorizontalAlignment="Right" Margin="0,0,85,10" VerticalAlignment="Bottom" Grid.Row="2" Click="pasteCategoryButton_Click" Padding="8,1"/>
+                <Button x:Name="copyCategoryButton" Content="Copy" HorizontalAlignment="Right" Margin="0,0,138,10" VerticalAlignment="Bottom" Grid.Row="2" Click="copyCategoryButton_Click" Padding="8,1"/>
+                <Button x:Name="showAllCategoriesButton" Content="Show All" HorizontalAlignment="Center" Margin="282,0,282,10" Grid.Row="2" VerticalAlignment="Bottom" Click="showAllCategoriesButton_Click" Padding="8,1"/>
+            </Grid>
+            <Label x:Name="categoriesLabel" Content="Categories" VerticalAlignment="Top" Height="40" Background="{x:Null}" Foreground="White" FontSize="24" Padding="5,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Grid.Column="2" Grid.Row="2" Margin="10,0,0,0"/>
+            <Grid Background="#FFB4D6C6" Grid.ColumnSpan="2" Margin="10,40,10,10" Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+                </Grid.RowDefinitions>
+                <DataGrid ItemsSource="{Binding ElementName=categoryList, Path=SelectedItem.groups}" IsSynchronizedWithCurrentItem="True" x:Name="groupList" Margin="10,10,10,0" Grid.RowSpan="2" KeyUp="groupList_KeyUp" CellEditEnding="groupList_CellEditEnding">
+                    <DataGrid.CommandBindings>
+                        <CommandBinding Command="Copy" Executed="TermsCopyCommand" />
+                        <CommandBinding Command="Paste" Executed="TermsPasteCommand" />
+                        <!--<CommandBinding Command="Duplicate" Executed="TermsDuplicateCommand" />-->
+                    </DataGrid.CommandBindings>
+                    <DataGrid.InputBindings>
+                        <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                        <KeyBinding Key="V" Modifiers="Control" Command="Paste" />
+                        <!--<KeyBinding Key="D" Modifiers="Control" Command="Duplicate" />-->
+                    </DataGrid.InputBindings>
+                    <DataGrid.Columns>
+                        <!--<GridViewColumn Header="Name" Width="100" DisplayMemberBinding="{Binding name}"/>
+                        <GridViewColumn Header="Side" Width="100" DisplayMemberBinding="{Binding side}"/>
+                        <GridViewColumn Header="Positivity" Width="100" DisplayMemberBinding="{Binding positivity}"/>
+                        <GridViewColumn Header="Color" Width="100" DisplayMemberBinding="{Binding hexColor}"/>-->
+                    </DataGrid.Columns>
+                    <DataGrid.ItemContainerStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <EventSetter Event="Control.MouseDoubleClick" Handler="groupList_MouseDoubleClick" />
+                            <Setter Property="MaxHeight" Value="50" />
+                        </Style>
+                    </DataGrid.ItemContainerStyle>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu x:Name="groupListContextMenu" StaysOpen="true" Background="WhiteSmoke">
+                            <ContextMenu.BitmapEffect>
+                                <BitmapEffectGroup/>
+                            </ContextMenu.BitmapEffect>
+                            <MenuItem Header="Delete" x:Name="removeGroupContextMenuItem" Click="removeGroupContextMenuItem_Click"/>
+                            <MenuItem Header="Edit" x:Name="editGroupContextMenuItem" Click="editGroupContextMenuItem_Click" />
+                            <MenuItem Header="Duplicate" x:Name="duplicateGroupContextMenuItem" Click="duplicateGroupContextMenuItem_Click"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+                <Button x:Name="deleteGroupButton" Content="Delete" HorizontalAlignment="Left" Margin="10,8,2,10" Grid.Row="3" VerticalAlignment="Bottom" Click="deleteGroupButton_Click" Padding="8,1"/>
+                <Button x:Name="editGroupButton" Content="Edit" HorizontalAlignment="Left" Margin="69,8,0,10" VerticalAlignment="Bottom" Grid.Row="2" Click="editGroupButton_Click" Padding="8,1"/>
+                <Button x:Name="addGroupButton" Content="Add" HorizontalAlignment="Left" Margin="114,8,0,10" VerticalAlignment="Bottom" Click="addGroupButton_Click" Grid.Row="2" Padding="8,1" HorizontalContentAlignment="Center"/>
+                <Button x:Name="duplicateGroupButton" Content="Duplicate" HorizontalAlignment="Right" Margin="0,8,10,10" VerticalAlignment="Bottom" Grid.Row="2" Click="duplicateGroupButton_Click" Padding="8,1"/>
+                <Button x:Name="pasteGroupButton" Content="Paste" HorizontalAlignment="Right" Margin="0,8,85,10" VerticalAlignment="Bottom" Grid.Row="2" Click="pasteGroupButton_Click" Padding="8,1"/>
+                <Button x:Name="copyGroupButton" Content="Copy" HorizontalAlignment="Right" Margin="0,8,138,10" VerticalAlignment="Bottom" Grid.Row="2" Click="copyGroupButton_Click" Padding="8,1"/>
+                <Button x:Name="showAllGroupsButton" Content="Show All" HorizontalAlignment="Center" Margin="0,8,0,10" Grid.Row="2" VerticalAlignment="Bottom" Click="showAllGroupsButton_Click" Padding="8,1"/>
+            </Grid>
+            <Label x:Name="groupsLabel" Content="Groups" VerticalAlignment="Top" Height="40" Background="{x:Null}" Foreground="White" FontSize="24" Padding="5,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Margin="0,0,10,0" Grid.Row="3"/>
+            <Grid Background="#FFB4D6C6" Grid.ColumnSpan="2" Grid.Column="2" Margin="10,40,10,10" Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+                </Grid.RowDefinitions>
+                <DataGrid ItemsSource="{Binding ElementName=groupList, Path=SelectedItem.terms}" IsSynchronizedWithCurrentItem="True" x:Name="termList" Margin="10,10,10,0" Grid.RowSpan="2" KeyUp="termList_KeyUp" CellEditEnding="termList_CellEditEnding">
+                    <DataGrid.CommandBindings>
+                        <CommandBinding Command="Copy" Executed="TermsCopyCommand" />
+                        <CommandBinding Command="Paste" Executed="TermsPasteCommand" />
+                        <!--<CommandBinding Command="Duplicate" Executed="TermsDuplicateCommand" />-->
+                    </DataGrid.CommandBindings>
+                    <DataGrid.InputBindings>
+                        <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                        <KeyBinding Key="V" Modifiers="Control" Command="Paste" />
+                        <!--<KeyBinding Key="D" Modifiers="Control" Command="Duplicate" />-->
+                    </DataGrid.InputBindings>
+                    <DataGrid.Columns>
+                        <!--<GridViewColumn Header="Value" Width="200" DisplayMemberBinding="{Binding value}"/>
+                        <GridViewColumn Header="Is Image" Width="60" DisplayMemberBinding="{Binding isImage}"/>-->
+                    </DataGrid.Columns>
+                    <DataGrid.ItemContainerStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <EventSetter Event="Control.MouseDoubleClick" Handler="termList_MouseDoubleClick" />
+                            <Setter Property="MaxHeight" Value="50" />
+                        </Style>
+                    </DataGrid.ItemContainerStyle>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu x:Name="termListContextMenu" StaysOpen="true" Background="WhiteSmoke">
+                            <ContextMenu.BitmapEffect>
+                                <BitmapEffectGroup/>
+                            </ContextMenu.BitmapEffect>
+                            <MenuItem Header="Delete" x:Name="removeTermContextMenuItem" Click="removeTermContextMenuItem_Click"/>
+                            <MenuItem Header="Edit" x:Name="editTermContextMenuItem" Click="editTermContextMenuItem_Click" />
+                            <MenuItem Header="Duplicate" x:Name="duplicateTermContextMenuItem" Click="duplicateTermContextMenuItem_Click"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+                <Button x:Name="deleteTermButton" Content="Delete" HorizontalAlignment="Left" Margin="10,8,2,10" Grid.Row="2" VerticalAlignment="Bottom" Click="deleteTermButton_Click" Padding="8,1"/>
+                <Button x:Name="addTermButton" Content="Add" HorizontalAlignment="Left" Margin="114,8,0,10" VerticalAlignment="Bottom" Grid.Row="2" Click="addTermButton_Click" Padding="8,1"/>
+                <Button x:Name="editTermButton" Content="Edit" HorizontalAlignment="Left" Margin="69,8,0,10" VerticalAlignment="Bottom" Grid.Row="2" Click="editTermButton_Click" Padding="8,1"/>
+                <Button x:Name="duplicateTermButton" Content="Duplicate" HorizontalAlignment="Right" Margin="0,8,10,10" VerticalAlignment="Bottom" Grid.Row="2" Click="duplicateTermButton_Click" Padding="8,1"/>
+                <Button x:Name="addTermListButton" Content="Add List" HorizontalAlignment="Left" Margin="161,8,0,10" Grid.Row="2" VerticalAlignment="Bottom" Click="addTermListButton_Click" Padding="8,1"/>
+                <Button x:Name="pasteTermButton" Content="Paste" HorizontalAlignment="Right" Margin="0,8,85,10" VerticalAlignment="Bottom" Grid.Row="2" Click="pasteTermButton_Click" Padding="8,1"/>
+                <Button x:Name="copyTermButton" Content="Copy" HorizontalAlignment="Right" Margin="0,8,138,10" VerticalAlignment="Bottom" Grid.Row="2" Click="copyTermButton_Click" Padding="8,1"/>
+                <Button x:Name="showAllTermsButton" Content="Show All" HorizontalAlignment="Center" Margin="0,8,0,10" Grid.Row="2" VerticalAlignment="Bottom" Click="showAllTermsButton_Click" Padding="8,1"/>
+            </Grid>
+            <Label x:Name="termsLabel" Content="Terms" VerticalAlignment="Top" Height="40" Background="{x:Null}" Foreground="White" FontSize="24" Padding="5,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Grid.Column="2" Grid.Row="3" Margin="10,0,0,0"/>
+            <CheckBox IsChecked="{Binding ShowIAT, Source={x:Static local:Settings.Instance}}" Content="Show IAT" Grid.Column="3" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" FlowDirection="RightToLeft" Foreground="#FFF5F1D5"/>
+            <CheckBox IsChecked="{Binding ShowPracticeButton, Source={x:Static local:Settings.Instance}}" Content="Show Practice test button" Grid.Column="3" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FlowDirection="RightToLeft" Foreground="#FFF5F1D5"/>
+            <CheckBox IsChecked="{Binding ShowResultString, Source={x:Static local:Settings.Instance}}" Content="Show result string" Grid.Column="3" HorizontalAlignment="Left" Margin="10,52,0,0" VerticalAlignment="Top" FlowDirection="RightToLeft" Foreground="#FFF5F1D5"/>
+            <Grid Grid.Column="2" Margin="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Main Background Color: " HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFF5F1D5" Margin="0" Height="26" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <xctk:ColorPicker SelectedColor="{Binding MainBackgroundColor, Source={x:Static local:Settings.Instance}}" Grid.Column="1" Margin="0" VerticalAlignment="Center" HorizontalContentAlignment="Stretch"/>
+                <Label Content="Center Label Color: " HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFF5F1D5" Margin="0" Height="26" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <xctk:ColorPicker SelectedColor="{Binding CenterLabelColor, Source={x:Static local:Settings.Instance}}" Grid.Column="1" Margin="0" VerticalAlignment="Center" Grid.Row="1" HorizontalContentAlignment="Stretch"/>
+                <Label Content="Default List Item Color: " VerticalAlignment="Center" Foreground="#FFF5F1D5" Margin="0" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
+                <xctk:ColorPicker SelectedColor="{Binding DefaultListColor, Source={x:Static local:Settings.Instance}}" Grid.Column="1" Margin="0" VerticalAlignment="Center" Grid.Row="2" HorizontalContentAlignment="Stretch"/>
+            </Grid>
+            <Grid Grid.Column="1" HorizontalAlignment="Left" Height="118" VerticalAlignment="Top" Width="330">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Group Font Size: " HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFF5F1D5" Margin="0" Height="26" Width="100" VerticalContentAlignment="Center"/>
+                <xctk:IntegerUpDown Value="{Binding GroupFontSize, Source={x:Static local:Settings.Instance}}" Name="myUpDownControl" Grid.Column="1" Margin="0" HorizontalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Width="55" Maximum="199" Minimum="2" UpdateValueOnEnterKey="True" Text="px" FormatString="0px" ParsingNumberStyle="Integer" />
+                <Label Content="Center Font Size: " HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFF5F1D5" Margin="0" Height="26" Width="102" Grid.ColumnSpan="2" Grid.Row="1" VerticalContentAlignment="Center"/>
+                <xctk:IntegerUpDown Value="{Binding CenterFontSize, Source={x:Static local:Settings.Instance}}" x:Name="myUpDownControl_Copy" Grid.Column="1" Margin="0" HorizontalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Width="55" Maximum="199" Minimum="2" UpdateValueOnEnterKey="True" Text="px" FormatString="0px" ParsingNumberStyle="Integer" Grid.Row="1" />
+                <Label Content="Menu Font Size: " HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFF5F1D5" Margin="0" Grid.Row="2" VerticalContentAlignment="Center"/>
+                <xctk:IntegerUpDown Value="{Binding MenuFontSize, Source={x:Static local:Settings.Instance}}" x:Name="myUpDownControl_Copy1" Grid.Column="1" Margin="0" HorizontalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Width="55" Maximum="199" Minimum="2" UpdateValueOnEnterKey="True" Text="px" FormatString="0px" ParsingNumberStyle="Integer" Grid.Row="2" />
+                <Label Content="Text Font Size:" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFF5F1D5" Grid.Column="2" Margin="0" VerticalContentAlignment="Center"/>
+                <xctk:IntegerUpDown Value="{Binding TextFontSize, Source={x:Static local:Settings.Instance}}" x:Name="myUpDownControl_Copy2" Grid.Column="3" Margin="0" HorizontalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Width="55" Maximum="199" Minimum="2" UpdateValueOnEnterKey="True" Text="px" FormatString="0px" ParsingNumberStyle="Integer" />
+                <Label Content="Wrong X Font Size:" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFF5F1D5" Grid.Column="2" Margin="0" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Grid.Row="1"/>
+                <xctk:IntegerUpDown Value="{Binding WrongGuessFeedbackSize, Source={x:Static local:Settings.Instance}}" x:Name="myUpDownControl_Copy3" Grid.Column="3" Margin="0" HorizontalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Width="55" Maximum="199" Minimum="2" UpdateValueOnEnterKey="True" Text="px" FormatString="0px" ParsingNumberStyle="Integer" Grid.Row="1" />
+                <Label Content="X Stay Time:" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFF5F1D5" Grid.Column="2" Margin="0" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Grid.Row="2"/>
+                <xctk:IntegerUpDown Value="{Binding WrongGuessCooldownTime, Source={x:Static local:Settings.Instance}}" x:Name="myUpDownControl_Copy4" Grid.Column="3" Margin="0" HorizontalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Width="55" Maximum="20000" Minimum="0" UpdateValueOnEnterKey="True" Text="px" FormatString="0ms" ParsingNumberStyle="Integer" Grid.Row="2" Increment="50" />
+            </Grid>
+            <Button x:Name="calculateParticipantFromFileButton" Content="Button" HorizontalAlignment="Left" Margin="10,0,0,23" Grid.Row="4" VerticalAlignment="Bottom" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Padding="8,1,8,1.1" Click="calculateParticipantFromFileButton_Click"/>
+        </Grid>
+    </ScrollViewer>
+</Window>
